@@ -1,4 +1,3 @@
-from math import fabs
 from time import sleep
 
 PORT = 11111
@@ -10,6 +9,7 @@ def send_data(sock, data):
         sock.send(str(str(len(data)).zfill(MAXBYTES) + data).encode())
     else:
         sock.send(str(len(data)).zfill(MAXBYTES).encode())
+        sleep(0.1)
         sock.send(data)
 
 
