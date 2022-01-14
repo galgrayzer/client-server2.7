@@ -23,7 +23,7 @@ def split_requset(request):
             case _:
                 raise
     except:
-        if request == 'TAKE_SCREENSHOT' or 'SEND_PHOTO':
+        if request == 'TAKE_SCREENSHOT' or 'SEND_PHOTO' or 'EXIT':
             return True, request, None
         return False, None, None
 
@@ -43,7 +43,7 @@ def check_request(vaild, command, data):
                 if path.exists(data[0]) and path.exists(data[1]):
                     return True
                 return False
-            case 'TAKE_SCREENSHOT' | 'SEND_PHOTO':
+            case 'TAKE_SCREENSHOT' | 'SEND_PHOTO' | 'EXIT':
                 return True
     else:
         return False
@@ -106,10 +106,14 @@ def main():
         request = protocol.recive_data(client_sock)
         vaild, command, data = split_requset(request)
         if check_request(vaild, command, data):
+            if command == 'EXIT':
+                break
             protocol.send_data(client_sock, handle_request(command, data))
         else:
             protocol.send_data(
                 client_sock, "Can't prosses the request, please try again")
+    server_sock.close()
+    client_sock.close()
 
 
 if __name__ == '__main__':
