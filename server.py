@@ -1,6 +1,6 @@
 import protocol
 from socket import *
-from os import *
+from os import system, remove, path, listdir
 from subprocess import call
 from shutil import copy
 from pyautogui import *
@@ -23,7 +23,7 @@ def split_requset(request):
             case _:
                 raise
     except:
-        if request == 'TAKE_SCREENSHOT':
+        if request == 'TAKE_SCREENSHOT' or 'SEND_PHOTO':
             return True, request, None
         return False, None, None
 
@@ -43,7 +43,7 @@ def check_request(vaild, command, data):
                 if path.exists(data[0]) and path.exists(data[1]):
                     return True
                 return False
-            case 'TAKE_SCREENSHOT':
+            case 'TAKE_SCREENSHOT' | 'SEND_PHOTO':
                 return True
     else:
         return False
@@ -51,7 +51,12 @@ def check_request(vaild, command, data):
 
 def handle_request(command, data):
     """
-    Handeling the client request by the command.
+    Handeling the client request by the command:
+    ~ DIR - returning all the files in a requsted folder
+    ~ DELETE - deleting a file by his path
+    ~ EXECUTE - execute a file by his path
+    ~ COPY - copying a file to a given path
+    ~ TAKE_SCREENSHOT - taking a screenshot
     """
     match command:
         case 'DIR':
@@ -82,6 +87,12 @@ def handle_request(command, data):
             image = screenshot()
             image.save('server_screenshot.png')
             return 'Sucssfuly taken a screenshot'
+        case 'SEND_PHOTO':
+            try:
+                with open('server_screenshot.png', 'rb') as image:
+                    return image.read()
+            except:
+                return "Can't find image, try cuptaring first"
 
 
 def main():
