@@ -14,6 +14,8 @@ def split_requset(request):
     ~ The data given - path's / None
     """
     try:
+        if request == 'TAKE_SCREENSHOT' or 'SEND_PHOTO' or 'EXIT':
+            return True, request, None
         command, data = request.split(' ', 1)
         match command:
             case 'DIR' | 'DELETE' | 'EXECUTE':
@@ -23,8 +25,6 @@ def split_requset(request):
             case _:
                 raise
     except:
-        if request == 'TAKE_SCREENSHOT' or 'SEND_PHOTO' or 'EXIT':
-            return True, request, None
         return False, None, None
 
 
@@ -103,7 +103,12 @@ def main():
     client_sock, client_adress = server_sock.accept()
     print(f'A new connection from - {client_adress}')
     while True:
-        request = protocol.recive_data(client_sock)
+        while True:
+            try:
+                request = protocol.recive_data(client_sock)
+                break
+            except:
+                protocol.send_data(client_sock, "Somthing isn't right")
         vaild, command, data = split_requset(request)
         if check_request(vaild, command, data):
             if command == 'EXIT':
@@ -112,6 +117,7 @@ def main():
         else:
             protocol.send_data(
                 client_sock, "Can't prosses the request, please try again")
+        protocol.send_data(client_sock, 'Somthing went worng')
     server_sock.close()
     client_sock.close()
 
