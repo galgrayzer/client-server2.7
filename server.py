@@ -14,7 +14,7 @@ def split_requset(request):
     ~ The data given - path's / None
     """
     try:
-        if request == 'TAKE_SCREENSHOT' or 'SEND_PHOTO' or 'EXIT':
+        if request == 'TAKE_SCREENSHOT' or request == 'SEND_PHOTO' or request == 'EXIT':
             return True, request, None
         command, data = request.split(' ', 1)
         match command:
