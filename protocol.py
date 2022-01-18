@@ -14,9 +14,12 @@ def send_data(sock, data):
 
 
 def recive_data(sock, client=False):
-    if not client:
-        data_length = int(sock.recv(MAXBYTES).decode())
-        return sock.recv(data_length).decode()
-    else:
-        data_length = int(sock.recv(MAXBYTES).decode())
-        return sock.recv(data_length)
+    try:
+        if not client:
+            data_length = int(sock.recv(MAXBYTES).decode())
+            return sock.recv(data_length).decode()
+        else:
+            data_length = int(sock.recv(MAXBYTES).decode())
+            return sock.recv(data_length)
+    except:
+        return "Error"
