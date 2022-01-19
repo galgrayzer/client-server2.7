@@ -10,7 +10,7 @@ def split_requset(request):
     """
     Spliting the request to the following parms:
     ~ The validation of the request - True / False
-    ~ The command that given - DIR, DELETE, EXECUTE, COPY, TAKE_SCREENSHOT
+    ~ The command that given - DIR, DELETE, EXECUTE, COPY, TAKE_SCREENSHOT, SEND_PHOTO
     ~ The data given - path's / None
     """
     try:
@@ -57,6 +57,7 @@ def handle_request(command, data):
     ~ EXECUTE - execute a file by his path
     ~ COPY - copying a file to a given path
     ~ TAKE_SCREENSHOT - taking a screenshot
+    ~ SEND_PHOTO - sending the screenshot if taken
     """
     match command:
         case 'DIR':
